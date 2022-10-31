@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
 
   button: {
     height: 50,
-    marginTop: 20,
+    marginTop: 15,
     backgroundColor: "#4FAAF6",
     borderRadius: 15,
     alignItems: "center",

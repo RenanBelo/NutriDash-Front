@@ -20,7 +20,6 @@ export default function App() {
     Inter_900Black,
   });
 
-  let modalVisible = fontsLoaded ? false : true;
   return (
     <Background>
       <StatusBar
@@ -29,7 +28,7 @@ export default function App() {
         translucent
       />
       
-      {fontsLoaded ? <Routes /> : <Loading visible={modalVisible}/>}
+      {fontsLoaded ? <Routes /> : <Loading/>}
     </Background>
   );
 }

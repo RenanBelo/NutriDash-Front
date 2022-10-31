@@ -6,7 +6,7 @@ import { Background } from '../../components/Background';
 
 import { styles } from './styles';
 import { Icon } from "@rneui/themed";
-import { createUser } from '../../context/auth';
+import { validateUserInsertion } from '../../context/auth';
 
 type Props = {
   navigation: NavigationStackProp<{ userId: string }>;
@@ -19,6 +19,13 @@ export function SignUp(props: Props) {
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [weight, setWeight] = React.useState("");
   const [height, setHeight] = React.useState("");
+
+  const createUser = async (name: string, email: string, password: string, confirmPassword: string, weight: string, height: string) => {
+    const user = await validateUserInsertion(name, email, password, confirmPassword, weight, height)
+    if (user) {
+      props.navigation.navigate('SignIn')
+    }
+  }
 
   return (
     <Background>
@@ -69,7 +76,7 @@ export function SignUp(props: Props) {
           />
 
           <View style={styles.customInput}>
-            <Text style={styles.text}>Digite sua altura (cm)</Text>
+            <Text style={styles.text} >Digite sua altura (cm)</Text>
             <Text style={styles.textWeight}>Digite sua peso</Text>
           </View>
 
@@ -79,6 +86,7 @@ export function SignUp(props: Props) {
               keyboardType='numeric'
               onChangeText={height => setHeight(height)}
               style={styles.inputSmallHeight}
+              
               maxLength={3}
             />
             <TextInput
@@ -91,7 +99,7 @@ export function SignUp(props: Props) {
           </View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => createUser(name, email, password, weight, height)} 
+            onPress={() => createUser(name, email, password, confirmPassword, weight, height)}
           >
             <Text style={styles.textButton}>Finalizar cadastro</Text>
           </TouchableOpacity>

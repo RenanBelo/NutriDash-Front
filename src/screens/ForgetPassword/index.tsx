@@ -4,12 +4,11 @@ import { SafeAreaView, View, TextInput, Text, TouchableOpacity, Image, KeyboardA
 import { Icon } from "@rneui/themed";
 import { Background } from '../../components/Background';
 
-import { styles } from './styles';
-
 import { forgetPassword } from '../../context/auth';
 
 import { NavigationStackProp } from 'react-navigation-stack';
 
+import { styles } from './styles';
 
 type Props = {
   navigation: NavigationStackProp<{ userId: string }>;
