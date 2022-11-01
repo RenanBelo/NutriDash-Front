@@ -6,6 +6,7 @@ import { styles } from './styles';
 
 import { NavigationStackProp } from 'react-navigation-stack';
 
+
 import { validateLoginUser } from '../../context/auth';
 
 type Props = {
@@ -47,7 +48,7 @@ export function SignIn(props: Props) {
               style={styles.input}
             />
 
-            <Text style={styles.text}>Digite sua senha</Text>
+          <Text style={styles.text}>Digite sua senha</Text>
             <TextInput
               placeholder='Senha'
               onChangeText={password => setPassword(password)}
@@ -81,3 +82,4 @@ export function SignIn(props: Props) {
     </Background>
   );
 }
+

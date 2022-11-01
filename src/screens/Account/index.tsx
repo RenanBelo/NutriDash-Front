@@ -2,18 +2,15 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Background } from '../../components/Background';
 import { View, SafeAreaView, TouchableOpacity, Text,TextInput, Alert, Image,Modal, Pressable} from 'react-native';
 import { db, auth, storage } from "../../service/FirebaseConfig";
-import { doc, setDoc, collection , getDoc, addDoc, onSnapshot, deleteDoc, } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage"
 import  * as ImagePicker from 'expo-image-picker';
 
-
 import {  deleteMyUser, updateUser } from '../../context/auth';
 import { styles } from './styles';
-import { stringify } from '@firebase/util';
+
 import { getAuth, onAuthStateChanged, signOut, deleteUser } from 'firebase/auth';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { Card } from '@rneui/themed';
-import { goOffline } from 'firebase/database';
 
 
 
@@ -21,7 +18,9 @@ import { goOffline } from 'firebase/database';
 const number = '0';
 parseFloat(number);
 
-
+export function sai (){
+    
+}
 
 type Props = {
   navigation: NavigationStackProp<{ userId: string }>;
@@ -37,7 +36,7 @@ export function Account(props: Props) {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const uid = user.uid;
-      const reference = ref(storage, `newfolder/ ` + uid)
+      const reference = ref(storage, `Pictures/` + uid)
       await getDownloadURL(reference).then ((x) => {
         setUrl(x)
       })}
@@ -89,7 +88,7 @@ signOut(auth).then(() => {
   
   Alert.alert( 'Você deslogou!')
   props.navigation.navigate('SignIn')
-  goOffline
+  
     }).catch((error) => {
   Alert.alert('An error happened')
 }
@@ -126,7 +125,7 @@ const deleteAccount = () =>{
 
       const uploadUri = url;     
       
-    const reference = ref(storage, `newfolder/ ` + uid)
+    const reference = ref(storage, `Pictures/` + uid)
         const img = await fetch (result.uri);
         const bytes = await img.blob();
 
@@ -135,7 +134,6 @@ const deleteAccount = () =>{
         console.log("download bem sucedido")
       
         await getDownloadURL(reference).then ((x) => {
-          isLoading: true;
           setUrl(x)
       })
     }
@@ -144,6 +142,7 @@ const deleteAccount = () =>{
   }
   
 
+ 
 
   const updateAccount = async (newHeight: string, newWeight:string) => {
     const update = await updateUser(newHeight, newWeight)
@@ -167,8 +166,7 @@ const deleteAccount = () =>{
   
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [imageVisible, setImageVisible] = useState(false)
-
+  const [newModalVisible, setNewModalVisible] = useState(false)
   return (
     <Background>
      <SafeAreaView style={styles.container}>
@@ -176,13 +174,16 @@ const deleteAccount = () =>{
 
      
       <View style = {styles.sectionOne}> 
-    
+ <View style={styles.backgroundProfile}>
+      <Image source={require('../../assets/profiles.png')}   style={styles.profiles} />
+      </View>
           <Image source={{uri: url}} style={styles.picture} />
+          
      
      <View style = {styles.addPic}>
       
       <TouchableOpacity  onPress={pickImage}>
-                          <Image source={require('../../assets/camera.png')}   style={styles.picCamera} />
+       <Image source={require('../../assets/camera.png')}   style={styles.picCamera} />
         </TouchableOpacity>
         </View>
       
@@ -225,6 +226,8 @@ const deleteAccount = () =>{
           </View>
         </View>
       </Modal>
+
+      
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}
@@ -232,16 +235,47 @@ const deleteAccount = () =>{
         <Text style={styles.textStyle}>Editar Dados</Text>
       </Pressable>
     
-            <TouchableOpacity   style={styles.buttondelete}  onPress={() => deleteAccount()}>
-          <Text style={styles.textButton}>Excluir Conta</Text>
-        </TouchableOpacity>
+    
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={newModalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!newModalVisible);
+        }}
+      >
+          <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+         
+          <Text style={styles.modalText}>Tem certeza que deseja excluir sua conta?</Text>
+                    
+            <Pressable style={[styles.updatebutton]}  onPress={() => [deleteAccount(), props.navigation.navigate('SignIn')]}>
+            <Text style={styles.textStyle}>Confirmar</Text>
+              
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setNewModalVisible(!newModalVisible)}
+            >
+              <Text style={styles.textStyle}>Cancelar</Text>
+
+            </Pressable>
+          </View>
         </View>
-       
+      </Modal>
+      <Pressable
+        style={[styles.buttondelete, styles.buttondelete]}
+        onPress={() => setNewModalVisible(true)}
+      >
+        <Text style={styles.textStyle}>Excluir Conta</Text>
+      </Pressable>
     
         <View style = {styles.sectionThree}>
-        <TouchableOpacity style={styles.buttonlogout} onPress={logOut}>
+        <TouchableOpacity style={styles.buttonlogout} onPress={() => (logOut())}>
         <Text style ={styles.textLogout}  >Sair</Text>
         </TouchableOpacity>
+        </View>
         </View>
         </View>
     </SafeAreaView>
@@ -249,5 +283,7 @@ const deleteAccount = () =>{
     </Background>
   );
 
+
+  
 }
 

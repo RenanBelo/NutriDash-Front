@@ -36,7 +36,7 @@ function MyTabs() {
         options={{
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color }) => (
-            <Icon name="Dashboard" color={color} size={26} />
+            <Icon name="dashboard" color={color} size={26} />
           ),
         }}
       />

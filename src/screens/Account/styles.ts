@@ -76,7 +76,38 @@ export const styles = StyleSheet.create({
     borderWidth: 3,
     marginLeft: 83,
     borderColor: "#0e079d",
-    marginTop: -118
+    marginTop: -118,
+    
+    
+    
+  },
+
+  backgroundProfile: {
+      color:"#fff",
+      backgroundColor:"#fff",
+      height:178,
+      width: 174,
+      borderRadius: 150 / 2,
+    overflow: "hidden",
+    marginTop:-170,
+    position: 'relative',
+    top:60,
+    left:85
+    
+  },
+  profiles: 
+  {
+    width: 150,
+    height: 150,
+   
+    overflow: "hidden",
+    marginTop: -160,
+    position: 'relative',
+    top: 177,
+    left:13,
+    
+    
+
   },
  
   addPic:{
@@ -94,9 +125,9 @@ export const styles = StyleSheet.create({
 
   picCamera:{
 
-    marginLeft:12,
+    marginLeft:11,
     height:  22,
-    width: 20,
+    width: 22,
     marginTop: 11
 
 
