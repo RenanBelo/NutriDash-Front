@@ -9,7 +9,13 @@ import { forgetPassword } from '../../context/auth';
 import { NavigationStackProp } from 'react-navigation-stack';
 
 import { styles } from './styles';
+import { LogBox } from 'react-native';
 
+// Ignore log notification by message:
+LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs();
 type Props = {
   navigation: NavigationStackProp<{ userId: string }>;
 };

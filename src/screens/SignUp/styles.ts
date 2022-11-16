@@ -2,9 +2,10 @@ import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   card: {
+    flexGrow: 1,
     marginTop: '4%',
     width: '100%',
-    height: '100%',
+    height: '120%',
     borderRadius: 30,
     backgroundColor: '#F1EBed',
     padding: 10
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: '12%'
+    marginTop: '10%'
   },
 
   title: {
@@ -31,6 +32,12 @@ export const styles = StyleSheet.create({
   text: {
     marginTop: 15,
     marginLeft: 5,
+  },
+
+  textRadioButton: {
+    marginTop: 15,
+    marginLeft: 5,
+    marginBottom: 10
   },
 
   input: {
@@ -87,15 +94,23 @@ export const styles = StyleSheet.create({
 
   button: {
     height: 50,
-    marginTop: 40,
+    marginTop: 30,
+    marginBottom: 100,
     backgroundColor: "#4FAAF6",
     borderRadius: 15,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+
   },
 
   textButton: {
     color: "#FFFFFF",
     fontWeight: "bold"
+  },
+  
+  dropdown : {
+    width: "85%",
+    height: 110,
+    borderRadius: 5,
   }
 });

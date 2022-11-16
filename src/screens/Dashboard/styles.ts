@@ -11,8 +11,10 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignContent: 'space-around'
   },
-  blob: {
-    // flex: 1,
-    // position: 'relative',
+  helloUser: {
+    fontSize: 20,
+    color: '#E1E1E1',
+    marginLeft: 15,
+    marginTop: 20
   }
 });

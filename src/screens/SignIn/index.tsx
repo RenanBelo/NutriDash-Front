@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, SafeAreaView, View, TextInput, Text, TouchableOpacity, Image, KeyboardAvoidingView, BackHandler } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, SafeAreaView, View, TextInput, Text, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native';
 import { Background } from '../../components/Background';
 
 import { styles } from './styles';
 
 import { NavigationStackProp } from 'react-navigation-stack';
 
-
 import { validateLoginUser } from '../../context/auth';
+import { LogBox } from 'react-native';
 
+// Ignore log notification by message:
+LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs();
 type Props = {
   navigation: NavigationStackProp<{ userId: string }>;
 };
 
 export function SignIn(props: Props) {
-
-  useEffect(() => {
-
-    BackHandler.addEventListener('hardwareBackPress', () =>{
-      return true
-    })
-
-  },[])
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-      
   const loginUser = async (email: string, password: string) => {
     const user = await validateLoginUser(email, password)
     if(user) {
@@ -43,12 +39,11 @@ export function SignIn(props: Props) {
             <Text style={styles.text}>Digite seu E-mail</Text>
             <TextInput
               placeholder='E-mail'
-              
               onChangeText={email => setEmail(email)} value={email}
               style={styles.input}
             />
 
-          <Text style={styles.text}>Digite sua senha</Text>
+            <Text style={styles.text}>Digite sua senha</Text>
             <TextInput
               placeholder='Senha'
               onChangeText={password => setPassword(password)}
@@ -82,4 +77,3 @@ export function SignIn(props: Props) {
     </Background>
   );
 }
-
