@@ -15,6 +15,16 @@ export const styles = StyleSheet.create({
     marginLeft: "5%",
   },
 
+  loading: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: "#FFF",
+    marginTop: Platform.OS === "ios" ? "8%" : "15%",
+    marginLeft: "5%",
+  },
+
   backgroundProfile: {
     color: "#fff",
     backgroundColor: "#fff",

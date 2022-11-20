@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { db, auth, storage } from "../../firebase/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
@@ -43,13 +44,13 @@ type Props = {
 export function Account(props: Props) {
   useEffect(() => {
     const func = async () => {
-      const auth = getAuth();
-
+      setLoading(true);
       onAuthStateChanged(auth, async (user) => {
         if (user) {
           const uid = user.uid;
           const reference = ref(storage, `Pictures/` + uid);
           await getDownloadURL(reference).then((x) => {
+            setLoading(false);
             setUrl(x);
           });
         }
@@ -72,6 +73,7 @@ export function Account(props: Props) {
   const [upload, setUpload] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [newModalVisible, setNewModalVisible] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const auth = getAuth();
   onAuthStateChanged(auth, async (user) => {
@@ -87,10 +89,12 @@ export function Account(props: Props) {
           height: user.altura,
           weight: user.peso,
           physicalActivity: user.atividadeFisica,
-          typeDiet: user.tipoDieta
+          typeDiet: user.tipoDieta,
         };
 
-        const physicalActivityResult = levelPhysicalActivity(data.physicalActivity);
+        const physicalActivityResult = levelPhysicalActivity(
+          data.physicalActivity
+        );
 
         const typeDietResult = levelDiet(data.typeDiet);
 
@@ -139,12 +143,13 @@ export function Account(props: Props) {
           const img = await fetch(result.uri);
           const bytes = await img.blob();
 
+          setLoading(true);
           await uploadBytes(reference, bytes);
 
           console.log("download bem sucedido");
-
           await getDownloadURL(reference).then((x) => {
             setUrl(x);
+            setLoading(false);
           });
         }
       }
@@ -157,7 +162,12 @@ export function Account(props: Props) {
     newphysicalActivity: string,
     newTypeDiet: string
   ) => {
-    const update = await updateUser(newHeight, newWeight, newphysicalActivity, newTypeDiet);
+    const update = await updateUser(
+      newHeight,
+      newWeight,
+      newphysicalActivity,
+      newTypeDiet
+    );
 
     if (newHeight == "" && newWeight == "") {
       Alert.alert("Por favor, verifique os campos e tente novamente!");
@@ -208,11 +218,23 @@ export function Account(props: Props) {
           <View style={styles.backgroundProfile}>
             <Image
               source={require("../../assets/profiles.png")}
-              
               style={styles.profiles}
             />
           </View>
-          <Image source={{ uri: url }} style={styles.picture} />
+
+          {isLoading ? (
+            <View
+              style={styles.loading}>
+              <ActivityIndicator 
+              style={{marginTop: 30}}
+              color="#000" 
+              size="large" />
+            </View>
+          ) : (
+            <>
+              <Image source={{ uri: url }} style={styles.picture} />
+            </>
+          )}
 
           <View style={styles.addPic}>
             <TouchableOpacity onPress={pickImage}>
@@ -230,7 +252,10 @@ export function Account(props: Props) {
             <CustomTextUser title={"Altura(cm)"} content={height} />
             <CustomTextUser title={"Peso(Kg)"} content={weight} />
             <CustomTextUser title={"Tipo da dieta"} content={typeDiet} />
-            <CustomTextUser title={"Nivel de atividade"} content={physicalActivity} />
+            <CustomTextUser
+              title={"Nivel de atividade"}
+              content={physicalActivity}
+            />
           </View>
           <View style={styles.sectionTwo}>
             <Modal
@@ -274,7 +299,9 @@ export function Account(props: Props) {
                     defaultValue="Selecione o seu tipo"
                     onSelect={(selected) => setNewPhysicalActivity(selected)}
                   />
-                  <Text style={styles.modalText}>Selecione o que você deseja</Text>
+                  <Text style={styles.modalText}>
+                    Selecione o que você deseja
+                  </Text>
                   <ModalDropdown
                     options={["Perder peso", "Manter peso", "Aumentar peso"]}
                     dropdownStyle={styles.dropdown}
@@ -355,7 +382,10 @@ export function Account(props: Props) {
               <Text style={styles.textStyle}>Editar Dados</Text>
             </Pressable>
 
-            <TouchableOpacity style={[styles.button, styles.buttonOpen]} onPress={logOut}>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonOpen]}
+              onPress={logOut}
+            >
               <Text style={styles.textStyle}>Sair</Text>
             </TouchableOpacity>
           </View>

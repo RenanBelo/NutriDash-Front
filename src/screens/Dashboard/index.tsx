@@ -66,7 +66,7 @@ export function Dashboard() {
         <View style={styles.container} >
           <SmallCard title={'Calorias'} content={`Você consumiu 100cal de ${getCalories?.toFixed(0)} Kcal`} />
           <SmallCard title={'Carboidratos'} content={`Você consumiu 100g de ${getCarb?.toFixed(0)} Kcal`} />
-          <SmallCard title={'Gordura'} content={`Você consumiu 100g de ${getFatness?.toFixed(0)} Kcal`} />
+          <SmallCard title={'Gordura'} content={`Você consumiu 100g de ${getFatness.toFixed(0)} Kcal`} />
           <SmallCard title={'Proteina'} content={`Você consumiu 100g de ${getProtein?.toFixed(0)} Kcal`} />
           <SmallCard title={'Água'} content={'Você consumiu 100ml de 2000ml'} />
         </View>

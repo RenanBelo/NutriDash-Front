@@ -169,7 +169,8 @@ export function SignUp(props: Props) {
               <Text style={styles.textRadioButton}>Qual o seu sexo?</Text>
               <View>
                 <ModalDropdown
-                  options={["Feminino", "Masculino"]}
+                  options={["Feminino", "Masculino","menino","menino",
+                ]}
                   dropdownStyle={styles.dropdown}
                   style={styles.input}
                   defaultValue="Selecione o seu sexo"
