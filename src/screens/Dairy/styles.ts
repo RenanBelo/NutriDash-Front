@@ -31,11 +31,11 @@ export const styles = StyleSheet.create({
   input:{
   width: "100%",
   height: 55,
-  marginTop: 160,
+  marginTop: 60,
   borderWidth: 1,
   borderRadius: 15,
   borderColor: "#CDCDCD",
-  padding: 16,
+  padding: 8,
   backgroundColor: "#EEEEEE",
   fontWeight: "bold"
   },
@@ -68,6 +68,8 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
+  
 
   modalText: {
     marginTop: 20,

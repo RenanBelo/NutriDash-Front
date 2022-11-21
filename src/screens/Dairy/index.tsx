@@ -14,8 +14,9 @@ import {
   TextInput,
   Modal,
   Pressable,
+  FlatList,
 } from "react-native";
-import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
 import { db } from "../../firebase/FirebaseConfig";
@@ -31,18 +32,85 @@ LogBox.ignoreAllLogs();
 
 export function Dairy() {
  
+  useEffect(() => {
+    const func = async () => {
+   
+      
+          }
+    
+    func();
+  }, []);
+
+
 
   const [food, setFood] = React.useState("");
   const [newFood, setNewFood] = React.useState("");
+  const [proteinG, setProteinG]= React.useState("")
+  const [lipidG, setLipidG]= React.useState("")
+  const [carbohydrateG, setcarbohydrateG]= React.useState("")
   const [userItem, setUserItem]= React.useState("")
+  const [newUserItem, setNewUserItem]= React.useState("")
+  const [items, setItems]= React.useState("")
+ 
+
+
+
+
+  // food, proteinG, lipidG, carbohydrateG, userItem]
+
   const [newModalVisible, setNewModalVisible] = React.useState(false);
+  const [myModalVisible, setMyModalVisible] = React.useState(false);
+
   const [modalVisible, setModalVisible] = React.useState(false);
 
 
-
- 
-
   const auth = getAuth();
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const docRef = doc(db, "Alimentos", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const user = docSnap.data();
+        const data = {
+
+         // items:user.items,
+          newcarbohydrateG: user.carbohydrateG,
+          // lipidG: user.lipidG,
+          // proteinG: user.proteingG,
+          newUserItem: user.userItem,
+           newFood: user.food
+        }
+
+       // setItems(data.items)
+
+      //  setNewcarbohydrateG(data.carboidrato)
+        // setNewLipidG(data.lipidG)
+        // setNewProteinG(data.proteinG);
+        setNewUserItem(data.newUserItem);
+       setNewFood(data.newFood)
+
+
+      }
+      else{
+      Alert.alert("Erro, tente novamente")
+
+      }
+
+    }
+  });
+
+
+  
+
+
+
+
+
+
+
+
+  
   const addItemFood = async () => {
     onAuthStateChanged(auth, async (user) => {
       
@@ -51,19 +119,20 @@ export function Dairy() {
       if (user) {
         const uid = user.uid;
         setDoc(doc(db, "Alimentos", uid), {
-          items: arrayUnion({ food })
+          items: arrayUnion({ eumesmo: food })
         }, { merge: true })
 
       }
+      Alert.alert("Item adicionado")
+
     }
   
 
     else {
 
-          Alert.alert("Campo vazio, adicione um item")
+          Alert.alert("Erro, tente novamente")
     
               }
-
   })
 
  
@@ -73,21 +142,31 @@ export function Dairy() {
     onAuthStateChanged(auth, async (user) => {
       
       
-        if(userItem  !== "" ){
+        if(userItem  !== ""  && lipidG !=="" && carbohydrateG !=="" && proteinG !==""){
       if (user) {
         const uid = user.uid;
         setDoc(doc(db, "Alimentos", uid), {
-          items: arrayUnion({ userItem })
+          items: arrayUnion({  userItem, lipidG, carbohydrateG, proteinG }),
+          
+
         }, { merge: true })
 
       }
+
+      Alert.alert("item adicionado")
      
     }
 
+    else if( userItem === "" || lipidG=== "" || carbohydrateG==="" || proteinG==="" ){
+
+      Alert.alert('Campo vazio, digite um item')
+
+
+    }
 
     else {
 
-          Alert.alert("Campo vazio, adicione um item")
+          Alert.alert("Erro, tente novamente")
     
               }
 
@@ -97,37 +176,56 @@ export function Dairy() {
   }
 
 
-  const displayItem =() =>{
-    onAuthStateChanged(auth, async (user) => {
-      
-      
-      if(userItem  !== "" ){
-    if (user) {
-      const uid = user.uid;
-      const docRef = doc(db, "Usuarios", uid);
-      const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        const user = docSnap.data();
-        const data = {
-          food: user.food,
-          userItem: user.userItem,
-        
-        };
 
-     setFood(data.food)
-     setUserItem(data.userItem)
+const displayItems= async () =>{
+  onAuthStateChanged(auth, async (user) => {
     
+        if (user) {
+          const uid = user.uid;
 
-    }
-  }
-    }
+  const docRef = doc(db, "Alimentos", uid);
+const docSnap = await getDoc(docRef);
+
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+  const newUser = docSnap.data();
+       console.log(docSnap)
+      
+
+       const data = {
+
+       
+       items:newUser.items,
+     
+      
+       }
+        
+       
+      setItems(data.items)
+
+
+} else {
+  // doc.data() will be undefined in this case
+  console.log("No such document!");
+}
+
+
+}
+
   })
 }
 
+
+
+
     
-    
-  
+
+
+const me = JSON.stringify(items)
+
+
 
   return (
     <Background>
@@ -136,8 +234,7 @@ export function Dairy() {
           <View>
             <Picker
               selectedValue={food}
-              onValueChange={(itemValue) => setFood(itemValue)}
-              
+              onValueChange={(itemValue) => setFood(itemValue)}  
             >
               {objeto.map((cr) => {
                 return <Picker.Item label={cr.toString()} value={cr} />;
@@ -153,7 +250,21 @@ export function Dairy() {
             <Text style={styles.textButton}>Adicione um item</Text>
           </TouchableOpacity>
 
-          <TextInput placeholder='digite seu item' style={styles.input} 
+         
+
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={myModalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!myModalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+          
+                <TextInput placeholder='digite seu item' style={styles.input} 
             
             placeholderTextColor="#999"
             autoCorrect={true}
@@ -161,13 +272,75 @@ export function Dairy() {
             onChangeText={(text) => setUserItem(text)}
 >
 </TextInput>
-<TouchableOpacity
-            onPress={() => addUserItem()}
-            style={styles.button}
-          >
-            <Text style={styles.textButton}>Adicione um item</Text>
-          </TouchableOpacity>
 
+<TextInput placeholder='digite  o nivel de proteína do item' style={styles.input} 
+            
+            placeholderTextColor="#999"
+            autoCorrect={true}
+            maxLength={25}
+            keyboardType="numeric"
+
+            onChangeText={(text) => setProteinG(text)}
+>
+</TextInput>
+
+<TextInput placeholder='digite nível de lipidios do item' style={styles.input} 
+            
+            placeholderTextColor="#999"
+            autoCorrect={true}
+            keyboardType="numeric"
+
+            maxLength={25}
+            onChangeText={(text) => setLipidG(text)}
+>
+</TextInput>                
+<TextInput placeholder='digite o nivel de carboidratos ' style={styles.input} 
+            
+            placeholderTextColor="#999"
+            keyboardType="numeric"
+
+            autoCorrect={true}
+            maxLength={25}
+            onChangeText={(text) => setcarbohydrateG(text)}
+>
+</TextInput>
+
+
+<Pressable
+                    style={[styles.button, styles.buttonAction]}
+                    onPress={() => addUserItem()}
+                  >
+
+                    
+                                  
+
+                    <Text style={styles.textStyle}>Adicione um item</Text>
+                  </Pressable>
+
+
+
+                  <Pressable
+                    style={[styles.button, styles.buttonAction]}
+                    onPress={() => [setMyModalVisible(!myModalVisible)]}
+                  >
+
+                    
+                                  
+
+                    <Text style={styles.textStyle}>Volta</Text>
+                  </Pressable>
+
+
+
+                </View>
+              </View>
+            </Modal>
+            <Pressable
+              style={[styles.buttonDelete, styles.buttonDelete]}
+              onPress={() => setMyModalVisible(true)}
+            >
+              <Text style={styles.textStyle}>Adicione seu item</Text>
+            </Pressable>
           
 
 
@@ -184,12 +357,18 @@ export function Dairy() {
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
           
-                <Text style={styles.modalText}>{food}</Text>
+
+                  <Text>{me}</Text>
+
+        
+
                   <Pressable
+
                     style={[styles.button, styles.buttonAction]}
-                    onPress={() => [setNewModalVisible(!newModalVisible), displayItem() ]}
+                    onPress={() => [setNewModalVisible(!newModalVisible) ]}
                   >
                   
+                
 
                     <Text style={styles.textStyle}>Voltar</Text>
                   </Pressable>
@@ -199,7 +378,7 @@ export function Dairy() {
 
             <Pressable
               style={[styles.buttonDelete, styles.buttonDelete]}
-              onPress={() => setNewModalVisible(true)}
+              onPress={() => [setNewModalVisible(true), displayItems() ]}
             >
               <Text style={styles.textStyle}>Verificar Histórico</Text>
             </Pressable>

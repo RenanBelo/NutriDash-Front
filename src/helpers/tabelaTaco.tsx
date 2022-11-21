@@ -1,6 +1,6 @@
 const objeto = ([
     
-    "Arroz, integral, cru",
+"Arroz, integral, cru",
 "Arroz, tipo 1, cozido",
 "Arroz, tipo 1, cru",
 "Arroz, tipo 2, cozido",
