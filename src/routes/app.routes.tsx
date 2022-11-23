@@ -10,6 +10,8 @@ import { Dairy } from '../screens/Dairy';
 import { Account } from '../screens/Account';
 import { ForgetPassword } from '../screens/ForgetPassword';
 import { Splash } from '../screens/Splash';
+import { Videos } from '../screens/videos';
+import { DashboardDairy } from '../screens/DashboardDairy';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -41,12 +43,32 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
+        name="DashboardDairy"
+        component={DashboardDairy}
+        options={{
+          tabBarLabel: 'Dashboard do dia',
+          tabBarIcon: ({ color }) => (
+            <Icon name="book" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Dairy"
         component={Dairy}
         options={{
           tabBarLabel: 'Diario',
           tabBarIcon: ({ color }) => (
-            <Icon name="book" color={color} size={26} />
+            <Icon name="menu" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Videos"
+        component={Videos}
+        options={{
+          tabBarLabel: 'Videos',
+          tabBarIcon: ({ color }) => (
+            <Icon name="laptop" color={color} size={26} />
           ),
         }}
       />

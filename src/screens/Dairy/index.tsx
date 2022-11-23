@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Background } from "../../components/Background";
 
-import { objeto } from "../../helpers/tabelaTaco";
+import { taco } from "../../helpers/tabelaTaco";
 
 import { styles } from "./styles";
 import {
@@ -16,13 +16,21 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
 import { db } from "../../firebase/FirebaseConfig";
-
-
-
 
 // Ignore log notification by message:
 LogBox.ignoreLogs(["Warning: ..."]);
@@ -31,30 +39,20 @@ LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
 export function Dairy() {
- 
   useEffect(() => {
-    const func = async () => {
-   
-      
-          }
-    
+    const func = async () => {};
+
     func();
   }, []);
 
-
-
   const [food, setFood] = React.useState("");
   const [newFood, setNewFood] = React.useState("");
-  const [proteinG, setProteinG]= React.useState("")
-  const [lipidG, setLipidG]= React.useState("")
-  const [carbohydrateG, setcarbohydrateG]= React.useState("")
-  const [userItem, setUserItem]= React.useState("")
-  const [newUserItem, setNewUserItem]= React.useState("")
-  const [items, setItems]= React.useState("")
- 
-
-
-
+  const [proteinG, setProteinG] = React.useState("");
+  const [lipidG, setLipidG] = React.useState("");
+  const [carbohydrateG, setcarbohydrateG] = React.useState("");
+  const [userItem, setUserItem] = React.useState("");
+  const [newUserItem, setNewUserItem] = React.useState("");
+  const [items, setItems] = React.useState("");
 
   // food, proteinG, lipidG, carbohydrateG, userItem]
 
@@ -62,7 +60,6 @@ export function Dairy() {
   const [myModalVisible, setMyModalVisible] = React.useState(false);
 
   const [modalVisible, setModalVisible] = React.useState(false);
-
 
   const auth = getAuth();
   onAuthStateChanged(auth, async (user) => {
@@ -73,159 +70,123 @@ export function Dairy() {
       if (docSnap.exists()) {
         const user = docSnap.data();
         const data = {
-
-         // items:user.items,
+          // items:user.items,
           newcarbohydrateG: user.carbohydrateG,
           // lipidG: user.lipidG,
           // proteinG: user.proteingG,
           newUserItem: user.userItem,
-           newFood: user.food
-        }
+          newFood: user.food,
+        };
 
-       // setItems(data.items)
+        // setItems(data.items)
 
-      //  setNewcarbohydrateG(data.carboidrato)
+        //  setNewcarbohydrateG(data.carboidrato)
         // setNewLipidG(data.lipidG)
         // setNewProteinG(data.proteinG);
         setNewUserItem(data.newUserItem);
-       setNewFood(data.newFood)
-
-
+        setNewFood(data.newFood);
       }
-      else{
-      Alert.alert("Erro, tente novamente")
-
-      }
-
     }
   });
 
-
-  
-
-
-
-
-
-
-
-
-  
+  function DateString() {
+    let data = new Date(),
+      dia = data.getDate().toString().padStart(2, "0"),
+      mes = (data.getMonth() + 1).toString().padStart(2, "0"),
+      ano = data.getFullYear();
+    return `${ano}-${mes}-${dia}`;
+  }
+  const dateFormated = DateString();
   const addItemFood = async () => {
     onAuthStateChanged(auth, async (user) => {
-      
-      
-        if(food !== "" ){
-      if (user) {
-        const uid = user.uid;
-        setDoc(doc(db, "Alimentos", uid), {
-          items: arrayUnion({ eumesmo: food })
-        }, { merge: true })
-
-      }
-      Alert.alert("Item adicionado")
-
-    }
-  
-
-    else {
-
-          Alert.alert("Erro, tente novamente")
-    
-              }
-  })
-
- 
-  }
-
-  const addUserItem = async () => {
-    onAuthStateChanged(auth, async (user) => {
-      
-      
-        if(userItem  !== ""  && lipidG !=="" && carbohydrateG !=="" && proteinG !==""){
-      if (user) {
-        const uid = user.uid;
-        setDoc(doc(db, "Alimentos", uid), {
-          items: arrayUnion({  userItem, lipidG, carbohydrateG, proteinG }),
-          
-
-        }, { merge: true })
-
-      }
-
-      Alert.alert("item adicionado")
-     
-    }
-
-    else if( userItem === "" || lipidG=== "" || carbohydrateG==="" || proteinG==="" ){
-
-      Alert.alert('Campo vazio, digite um item')
-
-
-    }
-
-    else {
-
-          Alert.alert("Erro, tente novamente")
-    
-              }
-
-  })
-
- 
-  }
-
-
-
-
-const displayItems= async () =>{
-  onAuthStateChanged(auth, async (user) => {
-    
+      if (food !== "") {
         if (user) {
           const uid = user.uid;
+          setDoc(
+            doc(db, "Alimentos", uid),
+            {
+              items: arrayUnion({ comida: food, data: dateFormated }),
+            },
+            { merge: true }
+          );
+        }
+        Alert.alert("Item adicionado");
+      } else {
+        Alert.alert("Erro, tente novamente");
+      }
+    });
+  };
 
-  const docRef = doc(db, "Alimentos", uid);
-const docSnap = await getDoc(docRef);
+  // const addUserItem = async () => {
+  //   onAuthStateChanged(auth, async (user) => {
+  //     if (
+  //       userItem !== "" &&
+  //       lipidG !== "" &&
+  //       carbohydrateG !== "" &&
+  //       proteinG !== ""
+  //     ) {
+  //       if (user) {
+  //         const uid = user.uid;
+  //         setDoc(
+  //           doc(db, "Alimentos", uid),
+  //           {
+  //             items: arrayUnion({ userItem, lipidG, carbohydrateG, proteinG }),
+  //           },
+  //           { merge: true }
+  //         );
+  //       }
 
+  //       Alert.alert("item adicionado");
+  //     } else if (
+  //       userItem === "" ||
+  //       lipidG === "" ||
+  //       carbohydrateG === "" ||
+  //       proteinG === ""
+  //     ) {
+  //       Alert.alert("Campo vazio, digite um item");
+  //     } else {
+  //       Alert.alert("Erro, tente novamente");
+  //     }
+  //   });
+  // };
 
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-  const newUser = docSnap.data();
-       console.log(docSnap)
-      
+  const displayItems = async () => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const uid = user.uid;
 
-       const data = {
+        const docRef = doc(db, "Alimentos", uid);
+        const docSnap = await getDoc(docRef);
 
-       
-       items:newUser.items,
-     
-      
-       }
-        
-       
-      setItems(data.items)
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          const newUser = docSnap.data();
+          console.log(docSnap);
 
+          const data = {
+            items: newUser.items,
+          };
 
-} else {
-  // doc.data() will be undefined in this case
-  console.log("No such document!");
-}
+          setItems(data.items);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }
+    });
+  };
 
+  const listFoods = () => {
+    let arrayList = [];
+    for (let i = 0; i < items.length; i++) {
+      let array = items[i].comida;
+      let count = array - 1;
+      const table = taco[count];
+      arrayList.push(table.description);
+    }
 
-}
-
-  })
-}
-
-
-
-
-    
-
-
-const me = JSON.stringify(items)
-
-
+    return arrayList;
+  };
 
   return (
     <Background>
@@ -234,156 +195,129 @@ const me = JSON.stringify(items)
           <View>
             <Picker
               selectedValue={food}
-              onValueChange={(itemValue) => setFood(itemValue)}  
+              onValueChange={(itemValue) => setFood(itemValue)}
             >
-              {objeto.map((cr) => {
-                return <Picker.Item label={cr.toString()} value={cr} />;
+              {taco.map((cr) => {
+                return (
+                  <Picker.Item
+                    label={cr.description.toString()}
+                    value={cr.id}
+                  />
+                );
               })}
             </Picker>
           </View>
 
-          <TouchableOpacity
-          onPress={()=> addItemFood()}
-            style={styles.button}
-            
-          >
+          <TouchableOpacity onPress={() => addItemFood()} style={styles.button}>
             <Text style={styles.textButton}>Adicione um item</Text>
           </TouchableOpacity>
 
-         
+          {/* <Modal
+            animationType="slide"
+            transparent={true}
+            visible={myModalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!myModalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  placeholder="digite seu item"
+                  style={styles.input}
+                  placeholderTextColor="#999"
+                  autoCorrect={true}
+                  maxLength={25}
+                  onChangeText={(text) => setUserItem(text)}
+                ></TextInput>
+                <TextInput
+                  placeholder="digite  o nivel de proteína do item"
+                  style={styles.input}
+                  placeholderTextColor="#999"
+                  autoCorrect={true}
+                  maxLength={25}
+                  keyboardType="numeric"
+                  onChangeText={(text) => setProteinG(text)}
+                ></TextInput>
+                <TextInput
+                  placeholder="digite nível de lipidios do item"
+                  style={styles.input}
+                  placeholderTextColor="#999"
+                  autoCorrect={true}
+                  keyboardType="numeric"
+                  maxLength={25}
+                  onChangeText={(text) => setLipidG(text)}
+                ></TextInput>
+                <TextInput
+                  placeholder="digite o nivel de carboidratos "
+                  style={styles.input}
+                  placeholderTextColor="#999"
+                  keyboardType="numeric"
+                  autoCorrect={true}
+                  maxLength={25}
+                  onChangeText={(text) => setcarbohydrateG(text)}
+                ></TextInput>
+                <Pressable
+                  style={[styles.button, styles.buttonAction]}
+                  onPress={() => addUserItem()}
+                >
+                  <Text style={styles.textStyle}>Adicione um item</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonAction]}
+                  onPress={() => [setMyModalVisible(!myModalVisible)]}
+                >
+                  <Text style={styles.textStyle}>Volta</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+          <Pressable
+            style={[styles.buttonDelete, styles.buttonDelete]}
+            onPress={() => setMyModalVisible(true)}
+          >
+            <Text style={styles.textStyle}>Adicione seu item</Text>
+          </Pressable> */}
 
           <Modal
-              animationType="slide"
-              transparent={true}
-              visible={myModalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!myModalVisible);
-              }}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-          
-                <TextInput placeholder='digite seu item' style={styles.input} 
-            
-            placeholderTextColor="#999"
-            autoCorrect={true}
-            maxLength={25}
-            onChangeText={(text) => setUserItem(text)}
->
-</TextInput>
-
-<TextInput placeholder='digite  o nivel de proteína do item' style={styles.input} 
-            
-            placeholderTextColor="#999"
-            autoCorrect={true}
-            maxLength={25}
-            keyboardType="numeric"
-
-            onChangeText={(text) => setProteinG(text)}
->
-</TextInput>
-
-<TextInput placeholder='digite nível de lipidios do item' style={styles.input} 
-            
-            placeholderTextColor="#999"
-            autoCorrect={true}
-            keyboardType="numeric"
-
-            maxLength={25}
-            onChangeText={(text) => setLipidG(text)}
->
-</TextInput>                
-<TextInput placeholder='digite o nivel de carboidratos ' style={styles.input} 
-            
-            placeholderTextColor="#999"
-            keyboardType="numeric"
-
-            autoCorrect={true}
-            maxLength={25}
-            onChangeText={(text) => setcarbohydrateG(text)}
->
-</TextInput>
-
-
-<Pressable
-                    style={[styles.button, styles.buttonAction]}
-                    onPress={() => addUserItem()}
-                  >
-
-                    
-                                  
-
-                    <Text style={styles.textStyle}>Adicione um item</Text>
-                  </Pressable>
-
-
-
-                  <Pressable
-                    style={[styles.button, styles.buttonAction]}
-                    onPress={() => [setMyModalVisible(!myModalVisible)]}
-                  >
-
-                    
-                                  
-
-                    <Text style={styles.textStyle}>Volta</Text>
-                  </Pressable>
-
-
-
-                </View>
+            animationType="slide"
+            transparent={true}
+            visible={newModalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!newModalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <FlatList
+                  data={listFoods()}
+                  keyExtractor={(item) => item.toString()}
+                  showsVerticalScrollIndicator={false}
+                  style={styles.flatList}
+                  renderItem={({ item }) => (
+                    <View style={styles.containerView}>
+                      <Text>{item}</Text>
+                    </View>
+                  )}
+                />
+                <Pressable
+                  style={[styles.button, styles.buttonAction]}
+                  onPress={() => [setNewModalVisible(!newModalVisible)]}
+                >
+                  <Text style={styles.textStyle}>Voltar</Text>
+                </Pressable>
               </View>
-            </Modal>
-            <Pressable
-              style={[styles.buttonDelete, styles.buttonDelete]}
-              onPress={() => setMyModalVisible(true)}
-            >
-              <Text style={styles.textStyle}>Adicione seu item</Text>
-            </Pressable>
-          
+            </View>
+          </Modal>
 
-
-
-          <Modal
-              animationType="slide"
-              transparent={true}
-              visible={newModalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!newModalVisible);
-              }}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-          
-
-                  <Text>{me}</Text>
-
-        
-
-                  <Pressable
-
-                    style={[styles.button, styles.buttonAction]}
-                    onPress={() => [setNewModalVisible(!newModalVisible) ]}
-                  >
-                  
-                
-
-                    <Text style={styles.textStyle}>Voltar</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
-
-            <Pressable
-              style={[styles.buttonDelete, styles.buttonDelete]}
-              onPress={() => [setNewModalVisible(true), displayItems() ]}
-            >
-              <Text style={styles.textStyle}>Verificar Histórico</Text>
-            </Pressable>
-
-          
+          <Pressable
+            style={[styles.buttonDelete, styles.buttonDelete]}
+            onPress={() => [setNewModalVisible(true), displayItems()]}
+          >
+            <Text style={styles.textStyle}>Verificar Histórico</Text>
+          </Pressable>
         </View>
       </SafeAreaView>
     </Background>

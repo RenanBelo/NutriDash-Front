@@ -31,11 +31,11 @@ export const styles = StyleSheet.create({
   input:{
   width: "100%",
   height: 55,
-  marginTop: 60,
+  marginTop: 20,
   borderWidth: 1,
   borderRadius: 15,
   borderColor: "#CDCDCD",
-  padding: 8,
+  padding: 16,
   backgroundColor: "#EEEEEE",
   fontWeight: "bold"
   },
@@ -45,7 +45,32 @@ export const styles = StyleSheet.create({
     fontWeight: "bold"
   },
 
- 
+  flatList: {
+    flex: 1,
+    marginTop: 5,
+  },
+  
+  textFlatList: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "bold",
+    marginTop: 4,
+    textAlign: "center",
+  },
+
+  containerView: {
+    marginBottom: 20,
+    padding: 15,
+    borderRadius: 4,
+    backgroundColor: "#eee",
+
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: "#eee",
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -68,8 +93,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-
-  
 
   modalText: {
     marginTop: 20,
@@ -99,8 +122,20 @@ export const styles = StyleSheet.create({
   buttonAction:{
 
     height: 50,
-    marginTop: 31,
+    width: 300,
     backgroundColor: "#246",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+
+  },
+
+  
+  buttonBack:{
+
+    height: 50,
+    width: 300,
+    backgroundColor: "#00c176",
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",

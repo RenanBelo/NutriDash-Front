@@ -22,7 +22,7 @@ LogBox.ignoreLogs(["Warning: ..."]);
 // Ignore all log notifications:
 LogBox.ignoreAllLogs();
 
-export function Dashboard() {
+export function DashboardDairy() {
   const [name, setName] = React.useState("");
   const [weight, setWeight] = React.useState(Number);
   const [height, setHeight] = React.useState(Number);
@@ -77,30 +77,42 @@ export function Dashboard() {
         let listLipid = [];
         let listCalories = [];
 
+        function DateString() {
+          let data = new Date(),
+            dia = data.getDate().toString().padStart(2, "0"),
+            mes = (data.getMonth() + 1).toString().padStart(2, "0"),
+            ano = data.getFullYear();
+          return `${ano}-${mes}-${dia}`;
+        }
+
         for (let i = 0; i < user.items.length; i++) {
-          let array = user.items[i].comida;
-          let count = array - 1;
-          const table = taco[count];
-          listCarb.push(Number(table.carbohydrate_g));
-          listProtein.push(Number(table.protein_g));
-          listLipid.push(Number(table.lipid_g));
-          listCalories.push(Number(table.calories_g));
+          const date = DateString()
+
+          if (user.items[i].data == date) {
+            let array = user.items[i].comida;
+            let count = array - 1;
+            const table = taco[count];
+            listCarb.push(Number(table.carbohydrate_g));
+            listProtein.push(Number(table.protein_g));
+            listLipid.push(Number(table.lipid_g));
+            listCalories.push(Number(table.calories_g));
+          }
         }
 
         const resultCarb = listCarb.reduce((sum, item) => {
-          return sum + item;
+          return (sum + item);
         });
 
         const resultProtein = listProtein.reduce((sum, item) => {
-          return sum + item;
+          return (sum + item);
         });
 
         const resultLipid = listLipid.reduce((sum, item) => {
-          return sum + item;
+          return (sum + item);
         });
 
         const resultCalories = listCalories.reduce((sum, item) => {
-          return sum + item;
+          return (sum + item);
         });
 
         setCarbohydrate(resultCarb * 4);
@@ -140,31 +152,22 @@ export function Dashboard() {
   return (
     <Background>
       <SafeAreaView style={styles.adroidSafeArea}>
-        <Text style={styles.helloUser}>Bem vindo, {name}!</Text>
         <View style={styles.container}>
           <SmallCard
             title={"Calorias"}
-            content={`Você consumiu ${calories.toFixed(
-              0
-            )}  Kcal até o momento`}
+            content={`Você consumiu ${calories.toFixed(0)}  Kcal de ${getCalories?.toFixed(0)} Kcal`}
           />
           <SmallCard
             title={"Carboidratos"}
-            content={`Você consumiu ${carbohydrate.toFixed(
-              0
-            )} Kcal até o momento`}
+            content={`Você consumiu ${carbohydrate.toFixed(0)} Kcal de ${getCarb?.toFixed(0)} Kcal`}
           />
           <SmallCard
             title={"Gordura"}
-            content={`Você consumiu ${lipid.toFixed(
-              0
-            )} Kcal até o momento`}
+            content={`Você consumiu ${lipid.toFixed(0)} Kcal de ${getFatness.toFixed(0)} Kcal`}
           />
           <SmallCard
             title={"Proteina"}
-            content={`Você consumiu ${proteine.toFixed(
-              0
-            )} Kcal de ${getProtein?.toFixed(0)} Kcal`}
+            content={`Você consumiu ${proteine.toFixed(0)} Kcal de ${getProtein?.toFixed(0)} Kcal`}
           />
         </View>
       </SafeAreaView>
